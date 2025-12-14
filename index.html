@@ -7,20 +7,22 @@
     <meta name="google-site-verification" content="xzkheGRMivderCUCnHm9B8_Z2FEEcHmpLd70ckO_oAA" /> 
     
     <link rel="alternate" hreflang="ko" href="https://json.beekayutil.com/" />
-    <link rel="alternate" hreflang="en" href="https://json.beekayutil.com/en/" />
+    <link rel="alternate" hreflang="en" href="https://json.beekayutil.com/en" />
     
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4425383241428989"
      crossorigin="anonymous"></script>
     
-    <title>JSON/YAML 변환기: 온라인으로 JSON을 YAML로, YAML을 JSON으로 변환</title>
+    <title>JSON Formatter & Validator: JSON 코드 미화 및 유효성 검사 도구</title>
     <link rel="icon" href="/favicon.ico?v=1">
     <style>
         :root {
-            --primary-color: #3498db;
-            --secondary-bg: #f4f6f9;
+            --primary-color: #34495e; /* JSON/개발 툴은 어두운 회색 계열 */
+            --secondary-bg: #ecf0f1;
             --text-color: #333;
             --border-color: #ddd;
-            --light-border: #eee;
+            --code-bg: #2c3e50;
+            --code-text: #ecf0f1;
+            --button-hover: #2c3e50;
         }
 
         body {
@@ -31,7 +33,6 @@
             color: var(--text-color);
             line-height: 1.6;
             word-break: break-word;
-            word-wrap: break-word;
             padding-bottom: 0;
         }
 
@@ -43,7 +44,7 @@
         }
         
         .content-wrapper {
-            max-width: 1200px;
+            max-width: 1000px;
             margin: 30px auto;
             padding: 0 20px;
             padding-bottom: 500px;
@@ -56,20 +57,17 @@
             margin: 0;
         }
 
-        /* 텍스트 영역 스타일 */
-        .editor-section {
+        /* 입력 및 출력 섹션 */
+        .io-section {
             display: flex;
             gap: 20px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
         }
-        .editor-container {
+
+        .input-group, .output-group {
             flex: 1;
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
+
         textarea {
             width: 100%;
             height: 400px;
@@ -77,20 +75,19 @@
             border: 1px solid var(--border-color);
             border-radius: 4px;
             box-sizing: border-box;
-            font-family: 'Consolas', 'Courier New', monospace;
+            font-family: 'Courier New', monospace;
             font-size: 14px;
-            line-height: 1.4;
-            resize: vertical;
-            background-color: #fff;
+            background-color: #f9f9f9;
         }
-        
-        /* 버튼 및 결과 섹션 스타일 */
+
+        /* 버튼 및 컨트롤 */
         .controls {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
         }
-        .controls button {
+
+        button {
             background-color: var(--primary-color);
             color: white;
             padding: 10px 15px;
@@ -99,25 +96,22 @@
             cursor: pointer;
             font-size: 14px;
             transition: background-color 0.3s;
-        }
-        .controls button:hover {
-            background-color: #2980b9;
+            flex-grow: 1;
         }
 
-        .status-message {
+        button:hover {
+            background-color: var(--button-hover);
+        }
+        
+        /* 메시지 영역 */
+        #message {
             margin-top: 10px;
             padding: 10px;
             border-radius: 4px;
-            font-weight: bold;
+            display: none;
         }
-        .status-success {
-            background-color: #e8f9e8;
-            color: #2ecc71;
-        }
-        .status-error {
-            background-color: #fce8e8;
-            color: #e74c3c;
-        }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
 
         /* AdSense 광고 컨테이너 스타일 */
         .ad-container {
@@ -133,8 +127,8 @@
             font-size: 0.8em;
             color: #888;
         }
-        
-        /* SEO 정보 섹션 (Info-Section) 개선 */
+
+        /* SEO 정보 섹션 (Info-Section) */
         .info-section {
             margin-top: 40px;
             padding: 20px; 
@@ -146,7 +140,6 @@
         }
 
         .info-section h2 { color: var(--primary-color); margin-top: 0; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid var(--primary-color); }
-        .info-section ul, .info-section dl { list-style-type: none; padding-left: 0; }
         .info-section dt { font-weight: bold; margin-top: 15px; padding-left: 10px; border-left: 3px solid var(--primary-color); }
         .info-section dd { margin-left: 0; padding: 5px 0 10px 10px; border-bottom: 1px dotted var(--light-border); }
         .disclaimer small { font-size: 0.8em; color: #777; }
@@ -155,7 +148,7 @@
         .content-footer-area {
             margin: 0 auto;
             width: 100%;
-            max-width: 1200px;
+            max-width: 1000px;
             padding: 15px 20px;
             text-align: center;
             background-color: var(--primary-color);
@@ -172,20 +165,19 @@
         
         /* 반응형 디자인 */
         @media (max-width: 768px) {
-            .editor-section {
+            .io-section {
                 flex-direction: column;
-                gap: 0;
             }
-            .controls {
-                flex-wrap: wrap;
+            textarea {
+                height: 300px;
             }
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>JSON/YAML 변환기</h1>
-        <p>개발자를 위한 빠르고 안전한 JSON ↔ YAML 상호 변환 도구입니다.</p>
+        <h1>JSON Formatter & Validator</h1>
+        <p>복잡한 JSON 데이터를 읽기 쉬운 형태로 미화하고 유효성을 검사합니다.</p>
     </header>
 
     <div class="content-wrapper">
@@ -203,28 +195,28 @@
             </script>
         </div>
 
-        <section class="editor-section">
-            <div class="editor-container">
-                <label for="inputJson">JSON / YAML 입력:</label>
-                <textarea id="inputJson" placeholder="여기에 JSON 또는 YAML 데이터를 붙여넣으세요..."></textarea>
+        <section class="tool-section">
+            <div class="controls">
+                <button id="formatBtn">JSON 미화 (Format)</button>
+                <button id="minifyBtn">JSON 압축 (Minify)</button>
+                <button id="validateBtn">JSON 유효성 검사</button>
+                <button id="clearBtn">초기화</button>
             </div>
-            <div class="editor-container">
-                <label for="outputJson">변환 결과:</label>
-                <textarea id="outputJson" readonly placeholder="변환된 결과가 여기에 나타납니다..."></textarea>
+            
+            <div id="message"></div>
+
+            <div class="io-section">
+                <div class="input-group">
+                    <h2>입력 (Input)</h2>
+                    <textarea id="jsonInput" placeholder='여기에 JSON 코드를 붙여넣으세요. 예: {"key":"value", "array":[1,2,3]}'></textarea>
+                </div>
+                <div class="output-group">
+                    <h2>출력 (Output)</h2>
+                    <textarea id="jsonOutput" readonly placeholder="결과가 여기에 표시됩니다."></textarea>
+                </div>
             </div>
         </section>
 
-        <div class="controls">
-            <button id="formatBtn">JSON 형식 변환 (Format)</button>
-            <button id="minifyBtn">JSON 압축 (Minify)</button>
-            <button id="validateBtn">JSON 유효성 검사 (Validate)</button>
-            <button id="yamlToJsonBtn">YAML → JSON</button>
-            <button id="jsonToYamlBtn">JSON → YAML</button>
-            <button id="clearBtn">모두 지우기</button>
-        </div>
-
-        <div id="status" class="status-message">준비됨.</div>
-        
         <div class="ad-container middle-ad">
             <ins class="adsbygoogle"
                  style="display:block"
@@ -238,28 +230,25 @@
         </div>
 
         <section class="info-section">
-            <h2 id="principle">💡 JSON/YAML 변환기 사용 이유</h2>
+            <h2 id="principle">💡 JSON의 중요성 및 사용 원리</h2>
             <p>
-                JSON(JavaScript Object Notation)과 YAML은 데이터 교환에 필수적입니다. 이 도구는 개발자와 분석가가 데이터를 쉽게 읽고, 검증하고, 변환하여 작업 효율성을 높일 수 있도록 돕습니다.
+                JSON(JavaScript Object Notation)은 경량의 데이터 교환 형식으로, 사람과 기계 모두 읽기 쉽습니다. 웹 애플리케이션에서 서버와 클라이언트 간에 데이터를 전송하는 표준 방식으로 널리 사용됩니다. 이 도구는 개발 과정에서 JSON 구조의 오류를 빠르게 잡고 가독성을 높여줍니다.
             </p>
             
             <h2 id="faq">🛠️ 주요 기능 설명</h2>
             <dl>
-                <dt>형식 변환 (Beautify)</dt>
-                <dd>줄 바꿈과 들여쓰기를 추가하여 읽기 어려운 JSON 데이터를 사람이 쉽게 이해하고 디버깅할 수 있도록 정돈합니다.</dd>
+                <dt>JSON 미화 (Formatter)</dt>
+                <dd>공백과 들여쓰기를 추가하여 JSON 코드를 구조화합니다. 가독성을 높여 코드를 검토하거나 디버깅할 때 오류를 쉽게 찾을 수 있도록 돕습니다.</dd>
                 
-                <dt>압축 (Minify)</dt>
-                <dd>불필요한 공백, 줄 바꿈 등을 제거하여 JSON 파일 크기를 최소화합니다. 이는 네트워크 전송 속도를 높이는 데 중요합니다.</dd>
+                <dt>JSON 압축 (Minify)</dt>
+                <dd>모든 공백과 들여쓰기를 제거하여 파일 크기를 최소화합니다. 네트워크를 통해 데이터를 전송할 때 전송량을 줄여 성능을 최적화합니다.</dd>
 
-                <dt>유효성 검사 (Validate)</dt>
-                <dd>입력된 JSON 구조가 공식 표준을 준수하는지 확인합니다. 쉼표 누락이나 잘못된 따옴표 사용 등 구문 오류를 찾아냅니다.</dd>
-
-                <dt>YAML ↔ JSON 변환</dt>
-                <dd>YAML(Yet Another Markup Language) 형식과 JSON 형식 간의 상호 변환을 지원하여 다양한 개발 환경에 대응합니다.</dd>
+                <dt>JSON 유효성 검사 (Validator)</dt>
+                <dd>입력된 텍스트가 올바른 JSON 구문 규칙을 따르는지 확인합니다. 구문 오류가 있을 경우, 오류가 발생한 위치를 알려주어 디버깅 시간을 단축시킵니다.</dd>
             </dl>
             
             <p class="disclaimer">
-                <small>면책 고지: 이 도구는 사용자의 데이터를 브라우저 내에서 로컬로 처리합니다. 어떠한 데이터도 서버에 저장되거나 전송되지 않습니다. 사용자의 책임 하에 사용하십시오.</small>
+                <small>면책 고지: 이 도구는 클라이언트 측 JavaScript로 작동하며, 서버로 데이터를 전송하지 않습니다. 입력된 데이터는 안전하게 보호됩니다.</small>
             </p>
         </section>
 
@@ -279,11 +268,71 @@
             <p>&copy; 2024 beekayutil.com</p>
             <p>
                 <a href="https://beekayutil.com" target="_blank">SEO 분석기</a> | 
+                <a href="https://base64.beekayutil.com" target="_blank">Base64 변환기</a> | 
                 <a href="https://json.beekayutil.com" target="_blank">JSON 변환기</a> |
-                <a href="https://compound.beekayutil.com" target="_blank">복리 계산기</a>
+                <a href="https://compound.beekayutil.com" target="_blank">복리 계산기</a> |
+                <a href="https://labor.beekayutil.com" target="_blank">근로시간 계산기</a>
             </p>
         </div>
     </main>
-    </div> <script src="script.js"></script>
+    </div>
+    
+    <script>
+        document.getElementById('formatBtn').addEventListener('click', () => processJson('format'));
+        document.getElementById('minifyBtn').addEventListener('click', () => processJson('minify'));
+        document.getElementById('validateBtn').addEventListener('click', () => processJson('validate'));
+        document.getElementById('clearBtn').addEventListener('click', clearJson);
+
+        const inputEl = document.getElementById('jsonInput');
+        const outputEl = document.getElementById('jsonOutput');
+        const messageEl = document.getElementById('message');
+
+        function processJson(type) {
+            const jsonString = inputEl.value.trim();
+            messageEl.style.display = 'none';
+            outputEl.value = '';
+
+            if (!jsonString) {
+                showMessage('JSON을 입력해 주세요.', 'error');
+                return;
+            }
+
+            try {
+                const jsonObject = JSON.parse(jsonString);
+                
+                if (type === 'format' || type === 'validate') {
+                    // 미화 및 유효성 검사 (JSON.stringify(..., null, 4)로 미화)
+                    const formattedJson = JSON.stringify(jsonObject, null, 4);
+                    outputEl.value = formattedJson;
+                    if (type === 'validate') {
+                        showMessage('✅ 유효한 JSON 형식입니다.', 'success');
+                    } else {
+                        showMessage('✅ JSON 미화 완료.', 'success');
+                    }
+                } else if (type === 'minify') {
+                    // 압축 (공백 없이 stringify)
+                    const minifiedJson = JSON.stringify(jsonObject);
+                    outputEl.value = minifiedJson;
+                    showMessage('✅ JSON 압축 완료.', 'success');
+                }
+            } catch (error) {
+                // JSON.parse에서 에러 발생 시
+                showMessage(`❌ JSON 유효성 검사 오류: ${error.message}`, 'error');
+                outputEl.value = '유효하지 않은 JSON 코드입니다.';
+            }
+        }
+
+        function showMessage(text, type) {
+            messageEl.textContent = text;
+            messageEl.className = type; // success 또는 error 클래스 적용
+            messageEl.style.display = 'block';
+        }
+
+        function clearJson() {
+            inputEl.value = '';
+            outputEl.value = '';
+            messageEl.style.display = 'none';
+        }
+    </script>
 </body>
 </html>
