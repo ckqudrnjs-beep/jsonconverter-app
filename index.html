@@ -14,12 +14,276 @@
     
     <title>JSON/YAML 변환기: 온라인으로 JSON을 YAML로, YAML을 JSON으로 변환</title>
     <link rel="icon" href="/favicon.ico?v=1">
-    
     <style>
-        /* ... (스타일 내용 유지) ... */
+        :root {
+            --primary-color: #3498db;
+            --secondary-bg: #f4f6f9;
+            --text-color: #333;
+            --border-color: #ddd;
+            --light-border: #eee;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            color: var(--text-color);
+            line-height: 1.6;
+            word-break: break-word;
+            word-wrap: break-word;
+            padding-bottom: 0;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+        }
+        
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            padding-bottom: 500px;
+            margin-bottom: 0;
+            position: relative;
+        }
+
+        .container {
+            padding: 0;
+            margin: 0;
+        }
+
+        /* 텍스트 영역 스타일 */
+        .editor-section {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .editor-container {
+            flex: 1;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        textarea {
+            width: 100%;
+            height: 400px;
+            padding: 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.4;
+            resize: vertical;
+            background-color: #fff;
+        }
+        
+        /* 버튼 및 결과 섹션 스타일 */
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .controls button {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+        .controls button:hover {
+            background-color: #2980b9;
+        }
+
+        .status-message {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+        .status-success {
+            background-color: #e8f9e8;
+            color: #2ecc71;
+        }
+        .status-error {
+            background-color: #fce8e8;
+            color: #e74c3c;
+        }
+
+        /* AdSense 광고 컨테이너 스타일 */
+        .ad-container {
+            width: 100%;
+            min-height: 100px; 
+            margin: 20px 0;
+            text-align: center;
+            background-color: var(--secondary-bg);
+            border: 1px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8em;
+            color: #888;
+        }
+        
+        /* SEO 정보 섹션 (Info-Section) 개선 */
+        .info-section {
+            margin-top: 40px;
+            padding: 20px; 
+            background-color: var(--secondary-bg); 
+            border-radius: 8px; 
+            border: 1px solid var(--border-color); 
+            position: relative;
+            z-index: 1000;
+        }
+
+        .info-section h2 { color: var(--primary-color); margin-top: 0; margin-bottom: 15px; padding-bottom: 5px; border-bottom: 2px solid var(--primary-color); }
+        .info-section ul, .info-section dl { list-style-type: none; padding-left: 0; }
+        .info-section dt { font-weight: bold; margin-top: 15px; padding-left: 10px; border-left: 3px solid var(--primary-color); }
+        .info-section dd { margin-left: 0; padding: 5px 0 10px 10px; border-bottom: 1px dotted var(--light-border); }
+        .disclaimer small { font-size: 0.8em; color: #777; }
+
+        /* Footer 역할을 하는 div 스타일 */
+        .content-footer-area {
+            margin: 0 auto;
+            width: 100%;
+            max-width: 1200px;
+            padding: 15px 20px;
+            text-align: center;
+            background-color: var(--primary-color);
+            color: white;
+            position: relative;
+            z-index: 1;
+            box-sizing: border-box;
+        }
+        .content-footer-area a {
+            color: white;
+            text-decoration: none;
+            margin: 0 5px;
+        }
+        
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .editor-section {
+                flex-direction: column;
+                gap: 0;
+            }
+            .controls {
+                flex-wrap: wrap;
+            }
+        }
     </style>
 </head>
 <body>
-    <script src="script.js"></script> 
+    <header>
+        <h1>JSON/YAML 변환기</h1>
+        <p>개발자를 위한 빠르고 안전한 JSON ↔ YAML 상호 변환 도구입니다.</p>
+    </header>
+
+    <div class="content-wrapper">
+    <main class="container">
+        
+        <div class="ad-container top-ad">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4425383241428989"
+                 data-ad-slot="6443125932"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <section class="editor-section">
+            <div class="editor-container">
+                <label for="inputJson">JSON / YAML 입력:</label>
+                <textarea id="inputJson" placeholder="여기에 JSON 또는 YAML 데이터를 붙여넣으세요..."></textarea>
+            </div>
+            <div class="editor-container">
+                <label for="outputJson">변환 결과:</label>
+                <textarea id="outputJson" readonly placeholder="변환된 결과가 여기에 나타납니다..."></textarea>
+            </div>
+        </section>
+
+        <div class="controls">
+            <button id="formatBtn">JSON 형식 변환 (Format)</button>
+            <button id="minifyBtn">JSON 압축 (Minify)</button>
+            <button id="validateBtn">JSON 유효성 검사 (Validate)</button>
+            <button id="yamlToJsonBtn">YAML → JSON</button>
+            <button id="jsonToYamlBtn">JSON → YAML</button>
+            <button id="clearBtn">모두 지우기</button>
+        </div>
+
+        <div id="status" class="status-message">준비됨.</div>
+        
+        <div class="ad-container middle-ad">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4425383241428989"
+                 data-ad-slot="6613698081"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+
+        <section class="info-section">
+            <h2 id="principle">💡 JSON/YAML 변환기 사용 이유</h2>
+            <p>
+                JSON(JavaScript Object Notation)과 YAML은 데이터 교환에 필수적입니다. 이 도구는 개발자와 분석가가 데이터를 쉽게 읽고, 검증하고, 변환하여 작업 효율성을 높일 수 있도록 돕습니다.
+            </p>
+            
+            <h2 id="faq">🛠️ 주요 기능 설명</h2>
+            <dl>
+                <dt>형식 변환 (Beautify)</dt>
+                <dd>줄 바꿈과 들여쓰기를 추가하여 읽기 어려운 JSON 데이터를 사람이 쉽게 이해하고 디버깅할 수 있도록 정돈합니다.</dd>
+                
+                <dt>압축 (Minify)</dt>
+                <dd>불필요한 공백, 줄 바꿈 등을 제거하여 JSON 파일 크기를 최소화합니다. 이는 네트워크 전송 속도를 높이는 데 중요합니다.</dd>
+
+                <dt>유효성 검사 (Validate)</dt>
+                <dd>입력된 JSON 구조가 공식 표준을 준수하는지 확인합니다. 쉼표 누락이나 잘못된 따옴표 사용 등 구문 오류를 찾아냅니다.</dd>
+
+                <dt>YAML ↔ JSON 변환</dt>
+                <dd>YAML(Yet Another Markup Language) 형식과 JSON 형식 간의 상호 변환을 지원하여 다양한 개발 환경에 대응합니다.</dd>
+            </dl>
+            
+            <p class="disclaimer">
+                <small>면책 고지: 이 도구는 사용자의 데이터를 브라우저 내에서 로컬로 처리합니다. 어떠한 데이터도 서버에 저장되거나 전송되지 않습니다. 사용자의 책임 하에 사용하십시오.</small>
+            </p>
+        </section>
+
+        <div class="ad-container bottom-ad">
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-4425383241428989"
+                 data-ad-slot="1027341245"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            <script>
+                 (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+        
+        <div class="content-footer-area">
+            <p>&copy; 2024 beekayutil.com</p>
+            <p>
+                <a href="https://beekayutil.com" target="_blank">SEO 분석기</a> | 
+                <a href="https://json.beekayutil.com" target="_blank">JSON 변환기</a> |
+                <a href="https://compound.beekayutil.com" target="_blank">복리 계산기</a>
+            </p>
+        </div>
+    </main>
+    </div> <script src="script.js"></script>
 </body>
 </html>
