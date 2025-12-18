@@ -6,6 +6,7 @@
     
     <meta name="google-site-verification" content="xzkheGRMivderCUCnHm9B8_Z2FEEcHmpLd70ckO_oAA" /> 
     
+    <link rel="canonical" href="https://json.beekayutil.com/" />
     <link rel="alternate" hreflang="ko" href="https://json.beekayutil.com/" />
     <link rel="alternate" hreflang="en" href="https://json.beekayutil.com/en" />
     
@@ -162,6 +163,12 @@
             text-decoration: none;
             margin: 0 5px;
         }
+        .footer-legal {
+            margin-top: 10px;
+            padding-top: 5px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.9em;
+        }
         
         /* 반응형 디자인 */
         @media (max-width: 768px) {
@@ -232,19 +239,19 @@
         <section class="info-section">
             <h2 id="principle">💡 JSON의 중요성 및 사용 원리</h2>
             <p>
-                JSON(JavaScript Object Notation)은 경량의 데이터 교환 형식으로, 사람과 기계 모두 읽기 쉽습니다. 웹 애플리케이션에서 서버와 클라이언트 간에 데이터를 전송하는 표준 방식으로 널리 사용됩니다. 이 도구는 개발 과정에서 JSON 구조의 오류를 빠르게 잡고 가독성을 높여줍니다.
+                JSON(JavaScript Object Notation)은 경량의 데이터 교환 형식으로, 사람과 기계 모두 읽기 쉽습니다. 웹 애플리케이션에서 서버와 클라이언트 간에 데이터를 전송하는 표준 방식으로 널리 사용됩니다.
             </p>
             
             <h2 id="faq">🛠️ 주요 기능 설명</h2>
             <dl>
                 <dt>JSON 미화 (Formatter)</dt>
-                <dd>공백과 들여쓰기를 추가하여 JSON 코드를 구조화합니다. 가독성을 높여 코드를 검토하거나 디버깅할 때 오류를 쉽게 찾을 수 있도록 돕습니다.</dd>
+                <dd>공백과 들여쓰기를 추가하여 JSON 코드를 구조화합니다. 가독성을 높여 디버깅할 때 오류를 쉽게 찾을 수 있도록 돕습니다.</dd>
                 
                 <dt>JSON 압축 (Minify)</dt>
-                <dd>모든 공백과 들여쓰기를 제거하여 파일 크기를 최소화합니다. 네트워크를 통해 데이터를 전송할 때 전송량을 줄여 성능을 최적화합니다.</dd>
+                <dd>모든 공백과 들여쓰기를 제거하여 파일 크기를 최소화합니다. 데이터 전송 속도를 높이는 데 최적화되어 있습니다.</dd>
 
                 <dt>JSON 유효성 검사 (Validator)</dt>
-                <dd>입력된 텍스트가 올바른 JSON 구문 규칙을 따르는지 확인합니다. 구문 오류가 있을 경우, 오류가 발생한 위치를 알려주어 디버깅 시간을 단축시킵니다.</dd>
+                <dd>입력된 텍스트가 올바른 JSON 구문 규칙을 따르는지 확인합니다. 오류가 발생한 정확한 위치를 파악할 수 있습니다.</dd>
             </dl>
             
             <p class="disclaimer">
@@ -266,10 +273,15 @@
         
         <div class="content-footer-area">
             <p>&copy; 2024 beekayutil.com</p>
-            <p>
+            <div class="footer-legal">
+                <a href="https://beekayutil.com/privacy">개인정보처리방침</a> | 
+                <a href="https://beekayutil.com/terms">이용 약관</a> | 
+                <a href="https://beekayutil.com/contact">문의</a>
+            </div>
+            <p style="margin-top:10px;">
                 <a href="https://beekayutil.com" target="_blank">SEO 분석기</a> | 
                 <a href="https://base64.beekayutil.com" target="_blank">Base64 변환기</a> | 
-                <a href="https://json.beekayutil.com" target="_blank">JSON 변환기</a> |
+                <a href="https://json.beekayutil.com">JSON 변환기</a> |
                 <a href="https://compound.beekayutil.com" target="_blank">복리 계산기</a> |
                 <a href="https://labor.beekayutil.com" target="_blank">근로시간 계산기</a>
             </p>
@@ -301,7 +313,6 @@
                 const jsonObject = JSON.parse(jsonString);
                 
                 if (type === 'format' || type === 'validate') {
-                    // 미화 및 유효성 검사 (JSON.stringify(..., null, 4)로 미화)
                     const formattedJson = JSON.stringify(jsonObject, null, 4);
                     outputEl.value = formattedJson;
                     if (type === 'validate') {
@@ -310,13 +321,11 @@
                         showMessage('✅ JSON 미화 완료.', 'success');
                     }
                 } else if (type === 'minify') {
-                    // 압축 (공백 없이 stringify)
                     const minifiedJson = JSON.stringify(jsonObject);
                     outputEl.value = minifiedJson;
                     showMessage('✅ JSON 압축 완료.', 'success');
                 }
             } catch (error) {
-                // JSON.parse에서 에러 발생 시
                 showMessage(`❌ JSON 유효성 검사 오류: ${error.message}`, 'error');
                 outputEl.value = '유효하지 않은 JSON 코드입니다.';
             }
@@ -324,7 +333,7 @@
 
         function showMessage(text, type) {
             messageEl.textContent = text;
-            messageEl.className = type; // success 또는 error 클래스 적용
+            messageEl.className = type;
             messageEl.style.display = 'block';
         }
 
